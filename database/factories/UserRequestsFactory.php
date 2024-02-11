@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class UserRequestsFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id' => fake()->randomElement(User::pluck('id')),
+            'status' => 'active',
+            'message' => fake()->text(50),
+            'comment' => fake()->text(50),
         ];
     }
 }
