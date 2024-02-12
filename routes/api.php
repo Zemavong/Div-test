@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/{id}', [UserRequestsController::class, 'show'])->middleware('auth:sanctum');
 
-Route::put('/requests/{id}', [UserRequestsController::class, 'show'])->middleware('auth:sanctum');
+Route::put('/requests/{id}', [UserRequestsController::class, 'update'])->middleware('auth:sanctum')->middleware('admin');
 
 Route::post('/login', [AuthController::class, 'login'])->middleware('auth:sanctum');
 Route::post('/register', [AuthController::class, 'register']);
