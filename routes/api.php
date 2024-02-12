@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\UserRequestsController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +20,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/{id}', [UserRequestsController::class, 'index']);
+Route::get('/{id}', [UserRequestsController::class, 'show'])->middleware('auth:sanctum');
+
+Route::put('/requests/{id}', [UserRequestsController::class, 'show'])->middleware('auth:sanctum');
+
+Route::post('/login', [AuthController::class, 'login'])->middleware('auth:sanctum');
+Route::post('/register', [AuthController::class, 'register']);
