@@ -9,6 +9,23 @@ use Illuminate\Http\Request;
 class UserRequestController extends Controller
 {
 
+    public function showAll(Request $request)
+    {
+        $query = UserRequest::query();
+
+        if(isset($request['status'])) {
+            $query->where('status', '=', $request['status']);
+        }
+
+        if(isset($request['updated_at'])) {
+            $query->orderBy('updated_at', 'desc');
+        }
+
+        $response = $query->get();
+
+        return $response;
+    }
+
     public function show(Request $request)
     {
         return UserRequest::find($request->id);

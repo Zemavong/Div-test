@@ -19,8 +19,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/{id}', [UserRequestController::class, 'show'])->middleware('auth:sanctum');
+Route::get('/', [UserRequestController::class, 'showAll'])->middleware('auth:sanctum');
 
+Route::post('/', [UserRequestController::class, 'create'])->middleware('auth:sanctum');
 Route::put('/requests/{id}', [UserRequestController::class, 'update'])->middleware('auth:sanctum')->middleware('admin');
 Route::post('/requests', [UserRequestController::class, 'response'])->middleware('auth:sanctum');
 
