@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\LoginController;
-use App\Http\Controllers\Api\UserRequestsController;
+use App\Http\Controllers\Api\UserRequestController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +19,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/{id}', [UserRequestsController::class, 'show'])->middleware('auth:sanctum');
+Route::get('/{id}', [UserRequestController::class, 'show'])->middleware('auth:sanctum');
 
-Route::put('/requests/{id}', [UserRequestsController::class, 'update'])->middleware('auth:sanctum')->middleware('admin');
+Route::put('/requests/{id}', [UserRequestController::class, 'update'])->middleware('auth:sanctum')->middleware('admin');
+Route::post('/requests', [UserRequestController::class, 'response'])->middleware('auth:sanctum');
 
-Route::post('/login', [AuthController::class, 'login'])->middleware('auth:sanctum');
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);

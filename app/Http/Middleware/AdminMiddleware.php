@@ -21,7 +21,7 @@ class AdminMiddleware
             return $next($request);
         } else {
             return response()->json([
-                'message' => 'you have no rights for this request',
+                'message' => 'you do not have authorization for this action',
             ], Response::HTTP_FORBIDDEN);
         }
 
