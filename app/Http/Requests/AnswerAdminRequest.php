@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 class AnswerAdminRequest extends FormRequest
 {
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,7 +15,8 @@ class AnswerAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'comment' => 'required|max:255',
+            'status' => 'in:acive, resolved',
+            'comment' => 'required|string|max:255',
         ];
     }
 }
