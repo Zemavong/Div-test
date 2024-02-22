@@ -1,0 +1,292 @@
+openapi: 3.0.3
+info:
+  title: Тестовое задание в компанию Div - документация
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/
+    description: Dev server
+paths:
+  /requests:
+    get:
+      security:
+        - bearerAuth: [] 
+      summary: получение заявок ответственным лицом, с фильтрацией по статусу или дате
+      tags:
+        - Requests
+      operationId: getAllSubmissions
+      parameters:
+        - name: status
+          in: query
+          required: false
+          description: Параметр для фильтрации заявок по статусу
+          schema:
+            type: string
+            enum: [active, resolved]
+          example: active
+        - name: updated_at
+          in: query
+          required: false
+          description: Параметр для фильтрации заявок по дате
+          schema:
+            type: string
+            enum: [asc, desc]
+          example: asc
+      responses:
+        '200':
+          description: Получение списка всех заявок
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Requests"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '422':
+          $ref: "#/components/responses/UnprocessableContent"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        'default':
+          $ref: "#/components/responses/Error"
+    
+    post:
+      security:
+        - bearerAuth: [] 
+      summary: создание заявки пользователем
+      tags:
+        - Requests
+      operationId: setSubmisson
+      parameters:
+        - name: message
+          in: query
+          required: true
+          description: Сообщение пользователя
+          schema:
+            type: string
+          example: Заявка на регистрацию в турнире
+      responses:
+        '201':
+          description: Успешное создание заявки пользователем
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Request"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '422':
+          $ref: "#/components/responses/UnprocessableContent"
+        'default':
+          $ref: "#/components/responses/Error"
+          
+  /requests/{id}:
+    put:
+      security:
+        - bearerAuth: [] 
+      summary: ответ на конкретную задачу ответственным лицом
+      tags:
+        - Requests
+      operationId: updateSubmit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID проверяемой заявки
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: comment
+          in: query
+          required: true
+          description: комментарий ответственного лицп
+          schema:
+            type: string
+            example: проверенно
+      responses:
+        '200':
+          description: Заявка проверена
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Request"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '422':
+          $ref: "#/components/responses/UnprocessableContent"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        'default':
+          $ref: "#/components/responses/Error"
+          
+  /login:
+    post:
+      summary: авторизация
+      tags:
+        - Auth
+      operationId: Login
+      parameters:
+        - name: email
+          in: query
+          required: true
+          description: Email пользователя
+          schema:
+            type: string
+            format: email
+          example: stepanraikevich@gmail.com
+        - name: password
+          in: query
+          required: true
+          description: Пароль пользователя
+          schema:
+            type: string
+            format: password
+          example: test
+      responses:
+        '201':
+          description: Авторизация прошла успешно
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+        '422':
+          $ref: "#/components/responses/UnprocessableContent"
+        'default':
+          $ref: "#/components/responses/Error"
+  /register:
+    post:
+      summary: регистрация
+      tags:
+        - Auth
+      operationId: Register
+      parameters:
+        - name: email
+          in: query
+          required: true
+          description: Email пользователя
+          schema:
+            type: string
+            format: email
+          example: stepanraikevich@gmail.com
+        - name: name
+          in: query
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+          example: stepan
+        - name: password
+          in: query
+          required: true
+          description: Пароль пользователя
+          schema:
+            type: string
+            format: password
+          example: test
+        - name: password_confirmation
+          in: query
+          required: true
+          description: Подверждение пароля
+          schema:
+            type: string
+            format: password
+          example: test
+      responses:
+        '201':
+          description: Авторизация прошла успешно
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+        '422':
+          $ref: "#/components/responses/UnprocessableContent"
+        'default':
+          $ref: "#/components/responses/Error"
+              
+components:
+  schemas:
+    Request:
+      type: object
+      required:
+        - status
+        - message
+        - comment
+        - user_id
+      properties:
+        status:
+          type: string
+          enum: [active, resovled]
+          example: active
+        message:
+          type: string
+          example: Заявка на регистрацию в турнире
+        comment:
+          type: string
+          example: проверенно
+        user_id:
+          type: integer
+          minimum: 1
+        created_at:
+          type: string
+          format: date
+          example: 2024-02-11 10:27:04.000
+        updated_at:
+          type: string
+          format: date
+          example: 2024-02-11 10:27:04.000
+    
+    Requests:
+      type: array
+      items:
+        $ref: "#/components/schemas/Request"
+    
+    User:
+      type: object
+      required:
+       - name
+       - email
+       - password
+      properties:
+        name: 
+          type: string
+          example: stepan
+        email: 
+          type: string
+          format: email
+          example: stepanraikevich@gmail.com
+        password:
+          type: string
+          format: password
+          example: test
+        email_verified_at:
+          type: string
+          format: date
+          example: 2024-02-11 10:27:04.000
+        created_at:
+          type: string
+          format: date
+          example: 2024-02-11 10:27:04.000
+        updated_at:
+          type: string
+          format: date
+          example: 2024-02-11 10:27:04.000
+        role: 
+          type: string
+          enum: [admin, user]
+          example: admin
+          
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      
+    UnprocessableContent:
+      description: The message field is required.
+      
+    Forbidden:
+      description: you do not have authorization for this action.
+    
+    Error:
+      description: error
