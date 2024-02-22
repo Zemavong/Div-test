@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_requests', function (Blueprint $table) {
-            $table->id()->comment('Уникальный идентификатор');
+        Schema::create('user_submissions', function (Blueprint $table) {
+            $table->id()->unique()->comment('Уникальный идентификатор');
             $table->foreignId('user_id')->references('id')->on('users')->comment('ID пользователя');
             $table->enum('status', ['active', 'resolved'])->default('active')->comment('Статус заявки');
             $table->string('message')->nullable('false')->comment('Сообщение пользователя');

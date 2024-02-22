@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\UserRequests;
+use App\Models\UserSubmission;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,9 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->create();
-
-        UserRequests::factory(10)->create();
+        User::factory(1)->create();
+        UserSubmission::factory(10)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
